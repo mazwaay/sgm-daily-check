@@ -11,7 +11,7 @@ import login_with_invalid_phoneNumber2
 # Fungsi untuk menjalankan setiap file Playwright
 async def run_all():
     async with async_playwright() as p:
-        import login_with_password.open_sgm()
+        await login_with_password.open_sgm()
         await login_only_input_password.open_sgm()
         await login_only_input_phoneNumber.open_sgm()
         await login_with_invalid_phoneNumber.open_sgm()
