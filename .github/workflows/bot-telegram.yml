@@ -36,7 +36,7 @@ jobs:
         run: ls -la maincode/
 
       - name: Login with Password
-        run: python maincode/Login/run_all_login.py
+        run: python maincode/Login/run_tc_login.py
         env:
           TELEGRAM_TOKEN: ${{ secrets.BOT_TOKEN }}
           CHAT_ID: ${{ secrets.CHAT_ID }}
