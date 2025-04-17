@@ -33,7 +33,7 @@ jobs:
         run: ls -la
 
       - name: Verify file existence
-        run: ls -la telegramReports/
+        run: ls -la maincode/
 
       - name: Login with Password
         run: python telegramReports/run_all_login.py
@@ -42,5 +42,5 @@ jobs:
           CHAT_ID: ${{ secrets.CHAT_ID }}
           PHONE_NUMBER: ${{ secrets.PHONE_NUMBER }}
           PASSWORD: ${{ secrets.PASSWORD }}
-          USERNAME_CRED: ${{ secrets.USER_CRED }}
+          USERNAME_CRED: ${{ secrets.USERNAME_CRED }}
           PASSWORD_CRED: ${{ secrets.PASSWORD_CRED }}

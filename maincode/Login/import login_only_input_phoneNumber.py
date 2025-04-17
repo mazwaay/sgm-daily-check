@@ -47,7 +47,7 @@ async def open_sgm():
     report = {
         "timestamp": timestamp,
         "steps": [],
-        "status": "*success*"
+        "status": "*PASS*"
     }
 
     async with async_playwright() as p:
@@ -70,7 +70,7 @@ async def open_sgm():
             report["screenshot"] = screenshot_filename
 
         except Exception as e:
-            report["status"] = "*failed*"
+            report["status"] = "*FAIL*"
             report["error"] = str(e)
         
         finally:
@@ -80,7 +80,7 @@ async def open_sgm():
             if os.path.exists(screenshot_filename):
                 caption_time = datetime.datetime.now(jakarta_tz).strftime("%d-%m-%Y %H:%M:%S")
                 caption_steps = "\n".join([f"{idx+1}. {step}" for idx, step in enumerate(report["steps"])])
-                caption = f"Update Time Zone Test: {report['status']}\n\nTest step:\n{caption_steps}\n\nCreate on:{caption_time}"
+                caption = f"Login with Password: {report['status']}\n\nTest step:\n{caption_steps}\n\nCreate on:{caption_time}"
                 
                 response = send_telegram_photo(screenshot_filename, caption=caption)
                 print("Status kirim foto:", response.status_code)
