@@ -34,9 +34,6 @@ jobs:
 
       - name: Verify file existence
         run: ls -la maincode/
-
-      - name: Login with Password
-        run: python maincode/Login
         env:
           TELEGRAM_TOKEN: ${{ secrets.BOT_TOKEN }}
           CHAT_ID: ${{ secrets.CHAT_ID }}
