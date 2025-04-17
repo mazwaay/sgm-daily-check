@@ -1,0 +1,5 @@
+# File environment
+*.env
+/venv/
+/.venv/
+*.local

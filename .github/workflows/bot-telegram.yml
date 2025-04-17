@@ -1,0 +1,46 @@
+name: Playwright CI with Telegram Reporting
+
+on:
+  schedule:
+    - cron: '0 23 * * *'  # Eksekusi setiap hari jam 06:00 WIB (23:00 UTC)
+  workflow_dispatch:  # Memungkinkan eksekusi manual
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          pip install playwright
+          playwright install
+          pip install requests
+          pip install requests playwright python-dotenv
+          pip install pytz
+
+      - name: Print working directory
+        run: pwd
+
+      - name: List directory contents
+        run: ls -la
+
+      - name: Verify file existence
+        run: ls -la telegramReports/
+
+      - name: Login with Password
+        run: python telegramReports/run_all_login.py
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.BOT_TOKEN }}
+          CHAT_ID: ${{ secrets.CHAT_ID }}
+          PHONE_NUMBER: ${{ secrets.PHONE_NUMBER }}
+          PASSWORD: ${{ secrets.PASSWORD }}
+          USERNAME_CRED: ${{ secrets.USER_CRED }}
+          PASSWORD_CRED: ${{ secrets.PASSWORD_CRED }}
