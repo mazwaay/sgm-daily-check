@@ -6,7 +6,7 @@ import asyncio
 from dotenv import load_dotenv
 import pytz
 import traceback
-from faker import Faker  # Import Faker library
+from faker import Faker
 
 # Load environment variables
 load_dotenv()
@@ -14,11 +14,13 @@ BOT_TOKEN = os.getenv("BOT_TOKEN")
 CHAT_ID = os.getenv("CHAT_ID")
 USERNAME = os.getenv("USERNAME_CRED")
 PASSWORD = os.getenv("PASSWORD_CRED")
+PHONE_NUMBER = os.getenv("PHONE_NUMBER")
+USERNAME_CRED = os.getenv("USERNAME_CRED")
+PASSWORD_CRED = os.getenv("PASSWORD_CRED")
 
 # Initialize Faker
-fake = Faker('id_ID')  # 'id_ID' untuk data Indonesia
+fake = Faker('id_ID')
 
-# Telegram configuration
 def send_telegram_message(text, chat_id=CHAT_ID):
     try:
         url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
@@ -55,19 +57,17 @@ def send_telegram_photo(photo_path, chat_id=CHAT_ID, caption=""):
             except:
                 pass
 
-# Main async function
 async def open_sgm():
-    # Get the current time in Jakarta timezone (WIB)
     jakarta_tz = pytz.timezone("Asia/Jakarta")
     timestamp = datetime.datetime.now(jakarta_tz).strftime("%d%m%Y_%H%M%S")
-    
     screenshot_filename = f"temp_screenshot_{timestamp}.png"
 
     report = {
         "timestamp": timestamp,
         "steps": [],
         "status": "*success*",
-        "error": None
+        "error": None,
+        "failed_step": None
     }
 
     try:
@@ -77,28 +77,60 @@ async def open_sgm():
             page = await context.new_page()
 
             try:
-                # Gunakan HTTP Basic Auth pada URL
-                auth_url = f"https://{USERNAME}:{PASSWORD}@uat.generasimaju.co.id"
+                # Step 1: Open website with basic auth
+                current_step = 1
+                step_desc = "Open the website with basic auth credentials"
+                auth_url = f"https://{USERNAME_CRED}:{PASSWORD_CRED}@uat.generasimaju.co.id"
                 await page.goto(auth_url)
-                report["steps"].append("Open the website with basic auth credentials.")
-                print("Open the website with basic auth credentials.")
+                report["steps"].append(f"{current_step}. {step_desc}")
+                print(f"Step {current_step}: {step_desc}")
 
-                # Tunggu sampai halaman benar-benar termuat (jika ada elemen spesifik bisa ditambahkan)
+                # Step 2: Wait for page to load
+                current_step = 2
+                step_desc = "Wait for page to load"
                 await page.wait_for_timeout(3000)
+                report["steps"].append(f"{current_step}. {step_desc}")
+                print(f"Step {current_step}: {step_desc}")
 
+                # Step 3: Click cookie button
+                current_step = 3
+                step_desc = "Click the Aktifkan Semua Cookie button"
                 await page.locator("text=Aktifkan Semua Cookie").click()
-                report["steps"].append("Click the Aktifkan Semua Cookie button.")
-                print("Click the Aktifkan Semua Cookie button.")
+                report["steps"].append(f"{current_step}. {step_desc}")
+                print(f"Step {current_step}: {step_desc}")
 
+                # Step 4: Click register button
+                current_step = 4
+                step_desc = "Click the register button in header"
                 await page.click("text=Daftar")
-                report["steps"].append("Click the register button in header.")
-                print("Click the register button in header.")
+                report["steps"].append(f"{current_step}. {step_desc}")
+                print(f"Step {current_step}: {step_desc}")
 
-                # Generate random name using Faker
+                # Step 5: Fill nama lengkap with random name
+                current_step = 5
                 random_name = fake.name()
-                await page.fill("//input[@id='namalengkap']", name)
-                report["steps"].append(f"Input nama lengkap: {name}")
-                print(f"Input nama lengkap: {name}")
+                step_desc = f"Input nama lengkap: {random_name}"
+                await page.fill("//input[@id='namalengkap']", random_name)
+                report["steps"].append(f"{current_step}. {step_desc}")
+                print(f"Step {current_step}: {step_desc}")
+
+                current_step = 6
+                step_desc = f"Input nomor ponsel: (secret)"
+                await page.fill('//*[@id="handphone"]', PHONE_NUMBER)
+                report["steps"].append(f"{current_step}. {step_desc}")
+                print(f"Step {current_step}: {step_desc}")
+
+                current_step = 7
+                step_desc = f"Input password: (secret)"
+                await page.fill('//*[@id="password-register"]', PASSWORD)
+                report["steps"].append(f"{current_step}. {step_desc}")
+                print(f"Step {current_step}: {step_desc}")
+
+                current_step = 8
+                step_desc = f"Select kondisi bunda: sedang hamil"
+                await page.getByRole('kondisi-bunda').fill('Sedang Hamil')
+                report["steps"].append(f"{current_step}. {step_desc}")
+                print(f"Step {current_step}: {step_desc}")
 
                 # Screenshot hasil
                 await page.screenshot(path=screenshot_filename, full_page=False)
@@ -107,10 +139,11 @@ async def open_sgm():
             except Exception as e:
                 report["status"] = "*failed*"
                 report["error"] = str(e)
-                print(f"Error during execution: {str(e)}")
-                traceback.print_exc()  # Print full traceback
+                report["failed_step"] = current_step
+                print(f"ERROR at Step {current_step}: {step_desc}")
+                print(f"Error details: {str(e)}")
+                traceback.print_exc()
                 
-                # Take screenshot on error
                 try:
                     await page.screenshot(path=screenshot_filename, full_page=False)
                     report["screenshot"] = screenshot_filename
@@ -120,7 +153,7 @@ async def open_sgm():
 
             finally:
                 await browser.close()
-                report["steps"].append("Close the browser.")
+                report["steps"].append(f"{current_step+1}. Close the browser")
 
     except Exception as e:
         report["status"] = "*failed*"
@@ -131,20 +164,20 @@ async def open_sgm():
     # Send report to Telegram
     try:
         caption_time = datetime.datetime.now(jakarta_tz).strftime("%d-%m-%Y %H:%M:%S")
-        caption_steps = "\n".join([f"{idx+1}. {step}" for idx, step in enumerate(report["steps"])])
+        caption_steps = "\n".join(report["steps"])
         
         if report["error"]:
-            error_msg = f"\n\nError:\n```\n{report['error']}\n```"
+            error_msg = f"\n\nError at Step {report['failed_step']}:\n```\n{report['error']}\n```"
         else:
             error_msg = ""
             
-        caption = f"Update Time Zone Test: {report['status']}\n\nTest step:\n{caption_steps}{error_msg}\n\nCreate on: {caption_time}"
+        caption = f"Update Time Zone Test: {report['status']}\n\nTest steps:\n{caption_steps}{error_msg}\n\nCreate on: {caption_time}"
         
         if report.get("screenshot") and os.path.exists(report["screenshot"]):
             response = send_telegram_photo(report["screenshot"], caption=caption)
             if response and response.status_code != 200:
                 print(f"Failed to send photo, status code: {response.status_code}")
-                send_telegram_message(caption)  # Fallback to text message
+                send_telegram_message(caption)
         else:
             print("No screenshot available, sending text message only")
             send_telegram_message(caption)
@@ -155,4 +188,3 @@ async def open_sgm():
 
 if __name__ == "__main__":
     asyncio.run(open_sgm())
-    

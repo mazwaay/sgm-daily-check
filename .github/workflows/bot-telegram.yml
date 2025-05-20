@@ -25,6 +25,7 @@ jobs:
           pip install requests
           pip install requests playwright python-dotenv
           pip install pytz
+          pip install faker
 
       - name: Print working directory
         run: pwd

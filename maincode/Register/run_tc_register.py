@@ -5,11 +5,7 @@ import pytz
 from dotenv import load_dotenv
 import os
 import requests
-import sys
-import io
-
-# Fix console encoding for Windows
-sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
+from faker import Faker
 
 # Load environment variables
 load_dotenv()
@@ -98,24 +94,12 @@ async def run_all():
     
     full_report = summary + "\n".join(results)
     
-    # Create console-friendly version
-    console_report = (
-        full_report
-        .replace("*", "")
-        .replace("✅", "[SUCCESS]")
-        .replace("❌", "[FAILED]")
-        .replace("📊", "[REPORT]")
-        .replace("⏰", "[TIME]")
-        .replace("🔢", "[COUNT]")
-        .replace("📈", "[RATE]")
-    )
-    
     # Print to console
     print("\n" + "="*50)
-    print(console_report)
+    print(full_report.replace("*", "").replace("✅", "[SUCCESS]").replace("❌", "[FAILED]"))
     print("="*50)
     
-    # Send original version with emojis to Telegram
+    # Send to Telegram
     send_telegram_message(full_report)
 
 if __name__ == "__main__":

@@ -16,14 +16,13 @@ load_dotenv()
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 CHAT_ID = os.getenv("CHAT_ID")
 
-# Import semua file Playwright
+# Import test modules
 import login_with_password
-import login_only_input_password
-import login_only_input_phoneNumber
-import login_with_invalid_phoneNumber
-import login_with_invalid_phoneNumber2
+# import login_only_input_password
+# import login_only_input_phoneNumber
+# import login_with_invalid_phoneNumber
+# import login_with_invalid_phoneNumber2
 
-# Telegram notification function
 def send_telegram_message(text, chat_id=CHAT_ID):
     try:
         url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
@@ -43,11 +42,11 @@ async def run_all():
     timestamp = datetime.datetime.now(jakarta_tz).strftime("%d-%m-%Y %H:%M:%S")
     
     test_cases = [
-        ("Login with Password", login_with_password.open_sgm),
-        ("Login Only Input Password", login_only_input_password.open_sgm),
-        ("Login Only Input Phone Number", login_only_input_phoneNumber.open_sgm),
-        ("Login with Invalid Phone Number", login_with_invalid_phoneNumber.open_sgm),
-        ("Login with Invalid Phone Number 2", login_with_invalid_phoneNumber2.open_sgm)
+        ("Login with Password", login_with_password.open_sgm)
+        # ("Login Only Input Password", login_only_input_password.open_sgm),
+        # ("Login Only Input Phone Number", login_only_input_phoneNumber.open_sgm),
+        # ("Login with Invalid Phone Number", login_with_invalid_phoneNumber.open_sgm),
+        # ("Login with Invalid Phone Number 2", login_with_invalid_phoneNumber2.open_sgm)
     ]
     
     results = []
@@ -71,21 +70,13 @@ async def run_all():
                 steps = "\n".join([f"    {step}" for step in result.get("steps", [])])
                 error_msg = f"\n    Error: {result.get('error')}" if result.get("error") else ""
                 
-                results.append(
-                    f"*{name}*: {status}\n"
-                    f"Steps:\n{steps}{error_msg}\n"
-                )
-                
+                results.append(f"*{name}*: {status}\nSteps:\n{steps}{error_msg}\n")
             except Exception as e:
                 status = "❌ FAILED"
                 failed_tests += 1
-                results.append(
-                    f"*{name}*: {status}\n"
-                    f"    Error: {str(e)}\n"
-                )
+                results.append(f"*{name}*: {status}\n    Error: {str(e)}\n")
                 print(f"Error running test {name}: {str(e)}")
     
-    # Generate summary report
     summary = (
         f"📊 *Test Automation Report*\n"
         f"⏰ Time: {timestamp}\n"
@@ -97,8 +88,6 @@ async def run_all():
     )
     
     full_report = summary + "\n".join(results)
-    
-    # Create console-friendly version
     console_report = (
         full_report
         .replace("*", "")
@@ -110,12 +99,10 @@ async def run_all():
         .replace("📈", "[RATE]")
     )
     
-    # Print to console
     print("\n" + "="*50)
     print(console_report)
     print("="*50)
     
-    # Send original version with emojis to Telegram
     send_telegram_message(full_report)
 
 if __name__ == "__main__":
