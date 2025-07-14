@@ -1,0 +1,92 @@
+[
+  {
+    "name": "prev_page_url",
+    "value": "/",
+    "domain": "www.generasimaju.co.id",
+    "path": "/klub-generasi-maju",
+    "expires": 1752253568,
+    "httpOnly": false,
+    "secure": false,
+    "sameSite": "Lax"
+  },
+  {
+    "name": "TCPID",
+    "value": "12575165037452591831",
+    "domain": ".generasimaju.co.id",
+    "path": "/",
+    "expires": 1786182637,
+    "httpOnly": false,
+    "secure": false,
+    "sameSite": "Lax"
+  },
+  {
+    "name": "_fbp",
+    "value": "fb.2.1752227438508.863339947565112255",
+    "domain": ".generasimaju.co.id",
+    "path": "/",
+    "expires": 1760003471,
+    "httpOnly": false,
+    "secure": false,
+    "sameSite": "Lax"
+  },
+  {
+    "name": "TC_PRIVACY",
+    "value": "0%40022%7C80%7C7203%402%2C4%401%401752227439833%2C1752227439833%2C1785923439833%40",
+    "domain": ".generasimaju.co.id",
+    "path": "/",
+    "expires": 1785923439,
+    "httpOnly": false,
+    "secure": false,
+    "sameSite": "Lax"
+  },
+  {
+    "name": "TC_PRIVACY_CENTER",
+    "value": "2%2C4",
+    "domain": ".generasimaju.co.id",
+    "path": "/",
+    "expires": 1785923439,
+    "httpOnly": false,
+    "secure": false,
+    "sameSite": "Lax"
+  },
+  {
+    "name": "PHPSESSID",
+    "value": "5ppquqkc1gh9jfqh3llu1uhsf1",
+    "domain": ".generasimaju.co.id",
+    "path": "/",
+    "expires": 1752313840.318411,
+    "httpOnly": true,
+    "secure": true,
+    "sameSite": "Lax"
+  },
+  {
+    "name": "memberIdKbs",
+    "value": "SGM-4241910",
+    "domain": ".generasimaju.co.id",
+    "path": "/",
+    "expires": 1754819468.648203,
+    "httpOnly": false,
+    "secure": true,
+    "sameSite": "Lax"
+  },
+  {
+    "name": "AWSALB",
+    "value": "vlTEM4mwJ3K+Z8WkgW1sF1JXzYwSOpDCNxI4R9an0spVjDp++edSpPlAt43Yd7vAlIIyyDSbv1JJf9kwXjB27Aqa6o/Mqr+tfJHs/sJqL9nLlr7xjck2/vRwCaYG6lbL+BOLA2P7zJwrHfnbJ1XMvvs+lJdkUiKQfdvQJFE5TqEktLx9hFM1e/DBmNWIXA==",
+    "domain": "www.generasimaju.co.id",
+    "path": "/",
+    "expires": 1752832272.185606,
+    "httpOnly": false,
+    "secure": false,
+    "sameSite": "Lax"
+  },
+  {
+    "name": "AWSALBCORS",
+    "value": "vlTEM4mwJ3K+Z8WkgW1sF1JXzYwSOpDCNxI4R9an0spVjDp++edSpPlAt43Yd7vAlIIyyDSbv1JJf9kwXjB27Aqa6o/Mqr+tfJHs/sJqL9nLlr7xjck2/vRwCaYG6lbL+BOLA2P7zJwrHfnbJ1XMvvs+lJdkUiKQfdvQJFE5TqEktLx9hFM1e/DBmNWIXA==",
+    "domain": "www.generasimaju.co.id",
+    "path": "/",
+    "expires": 1752832272.185663,
+    "httpOnly": false,
+    "secure": true,
+    "sameSite": "None"
+  }
+]

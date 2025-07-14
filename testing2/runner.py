@@ -8,10 +8,11 @@ import requests
 import sys
 import io
 
+# This script runs multiple test cases using Playwright and sends the results to a Telegram bot.
 import login_with_password
 import login
+import wew
 
-# Fix console encoding for Windows
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
 
 # Load environment variables
@@ -38,9 +39,11 @@ async def run_all():
     jakarta_tz = pytz.timezone("Asia/Jakarta")
     timestamp = datetime.datetime.now(jakarta_tz).strftime("%d-%m-%Y %H:%M:%S")
     
+    # Define test cases
     test_cases = [
         ("Login with Password", login_with_password.open_sgm),
-        ("Login", login.open_sgm)
+        ("Login", login.open_sgm),
+        ("WEW", wew.open_sgm),
     ]
     
     results = []
